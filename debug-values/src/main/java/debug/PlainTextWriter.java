@@ -14,6 +14,9 @@ import static debug.Constants.GEN_GROUP_FIELDS_MAP_NAME;
 import static debug.Constants.GEN_NAME_FIELD_MAP_NAME;
 
 class PlainTextWriter extends DebugWriter {
+    private static final String FIELD_CLASS = Field.class.getName();
+    private static final String VALUETYPE_CLASS = ValueType.class.getName();
+
     private final Writer mWriter;
     private final Logger mLogger;
 
@@ -55,7 +58,7 @@ class PlainTextWriter extends DebugWriter {
                             .replace(FIELD_SHORT_JAVA_NAME, f.shortJavaName)
                             .replace(FIELD_USER_NAME, f.name)
                             .replace(FIELD_USER_COMMENT, f.comment)
-                            .replace(FIELD_TYPE, "ValueType." + f.type.name())
+                            .replace(FIELD_TYPE, VALUETYPE_CLASS + "." + f.type.name())
                             .replace(FIELD_INT_VALUES, intArrayOfValue(f.values))
             ).append('\n');
         }
@@ -135,9 +138,9 @@ class PlainTextWriter extends DebugWriter {
     private static final String CLASS_TEMPLATE =
             "package debug;\n\n" +
                     "final class " + CLASS_NAME + " {\n" +
-                    "\tpublic static final java.util.Map<String, java.util.Map<String, Field>> " + GEN_GROUP_FIELDS_MAP_NAME + " = new java.util.HashMap<String, java.util.Map<String, Field>>();\n" +
-                    "\tpublic static final java.util.Map<String, java.util.List<Field>> " + GEN_CLASS_FIELDS_MAP_NAME + " = new java.util.HashMap<String, java.util.List<Field>>();\n" +
-                    "\tpublic static final java.util.Map<String, Field> " + GEN_NAME_FIELD_MAP_NAME + " = new java.util.HashMap<String, Field>();\n\n" +
+                    "\tpublic static final java.util.Map<String, java.util.Map<String, " + FIELD_CLASS + ">> " + GEN_GROUP_FIELDS_MAP_NAME + " = new java.util.HashMap<String, java.util.Map<String, " + FIELD_CLASS + ">>();\n" +
+                    "\tpublic static final java.util.Map<String, java.util.List<" + FIELD_CLASS + ">> " + GEN_CLASS_FIELDS_MAP_NAME + " = new java.util.HashMap<String, java.util.List<" + FIELD_CLASS + ">>();\n" +
+                    "\tpublic static final java.util.Map<String, " + FIELD_CLASS + "> " + GEN_NAME_FIELD_MAP_NAME + " = new java.util.HashMap<String, " + FIELD_CLASS + ">();\n\n" +
 
                     CLASS_FIELDS +
                     "\tstatic {\n" +
@@ -156,9 +159,9 @@ class PlainTextWriter extends DebugWriter {
     private static final String FIELD_TYPE = "{field_type}";
     private static final String FIELD_INT_VALUES = "{field_int_values}";
 
-    private static final String FIELD_TEMPLATE = "static final Field "
+    private static final String FIELD_TEMPLATE = "private static final " + FIELD_CLASS + " "
             + FIELD_VAR_NAME
-            + " = new Field(\"" + FIELD_JAVA_NAME
+            + " = new " + FIELD_CLASS + "(\"" + FIELD_JAVA_NAME
             + "\", \"" + FIELD_SHORT_JAVA_NAME
             + "\", \"" + FIELD_USER_NAME
             + "\", \"" + FIELD_USER_COMMENT
@@ -167,7 +170,7 @@ class PlainTextWriter extends DebugWriter {
             + ");";
 
     private static final String GROUP_VAR_NAME = "{group_var_name}";
-    private static final String GROUP_VARIABLE_TEMPLATE = "java.util.HashMap<String, Field> " + GROUP_VAR_NAME + " = new java.util.HashMap<String, Field>();";
+    private static final String GROUP_VARIABLE_TEMPLATE = "java.util.HashMap<String, " + FIELD_CLASS + "> " + GROUP_VAR_NAME + " = new java.util.HashMap<String, " + FIELD_CLASS + ">();";
 
     private static final String GROUP_FIELD_JAVA_NAME = "{group_field_java_name}";
     private static final String GROUP_FIELD_NAME = "{group_field_name}";
